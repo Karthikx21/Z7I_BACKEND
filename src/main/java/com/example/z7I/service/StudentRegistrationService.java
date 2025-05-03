@@ -1,12 +1,13 @@
 package com.example.z7I.service;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
 import com.example.z7I.dto.StudentRegistrationRequest;
 import com.example.z7I.model.StudentRegistration;
 import com.example.z7I.repository.StudentRepo;
 import com.fasterxml.jackson.databind.ObjectMapper;
-
+@Service
 public class StudentRegistrationService {
 
     @Autowired
