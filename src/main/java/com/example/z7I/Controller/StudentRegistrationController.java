@@ -9,7 +9,7 @@ import com.example.z7I.service.StudentRegistrationService;
 
 @RestController
 @RequestMapping("/api/student")
-@CrossOrigin(origins = "http://localhost:3000")
+@CrossOrigin(origins = {"http://localhost:3000", "https://z7i.in"}) 
 public class StudentRegistrationController {
 
     private final StudentRegistrationService studentRegistrationService;
