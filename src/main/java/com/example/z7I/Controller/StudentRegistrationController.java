@@ -13,12 +13,23 @@ import com.example.z7I.service.StudentRegistrationService;
 @RestController
 @RequestMapping("/api/student")
 public class StudentRegistrationController {
-    public StudentRegistrationService studentRegistrationService;
+
+    private final StudentRegistrationService studentRegistrationService;
+
+    public StudentRegistrationController(StudentRegistrationService studentRegistrationService) {
+        this.studentRegistrationService = studentRegistrationService;
+    }
 
     @PostMapping("/register")
-    public ResponseEntity<StudentRegistration> registerStudent(@RequestBody StudentRegistrationRequest request){
+    public ResponseEntity<StudentRegistration> registerStudent(@RequestBody StudentRegistrationRequest request) {
         StudentRegistration studentRegistration = studentRegistrationService.registerStudent(request);
         return ResponseEntity.ok(studentRegistration);
     }
 
+    // Optional: Health check endpoint for Railway
+    @RequestMapping("/health")
+    public String health() {
+        return "✅ Student Registration API is up.";
+    }
 }
+
