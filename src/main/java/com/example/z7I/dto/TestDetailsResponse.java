@@ -16,6 +16,8 @@ public class TestDetailsResponse {
 
     public static class TestDetailsData {
         private Long id;
+
+        private Integer classId;
         private String testDate;
         private String testMode;
         private String testCity;
@@ -23,6 +25,7 @@ public class TestDetailsResponse {
         private String studyCentre;
         private String programName;
         private String studyWish;
+        private String testType;  // discriminator column to differentiate test details types
         // Getters and setters
         public Long getId() { return id; }
         public void setId(Long id) { this.id = id; }
@@ -45,6 +48,22 @@ public class TestDetailsResponse {
 
         public void setStudyWish(String studyWish) {
             this.studyWish = studyWish;
+        }
+
+        public Integer getClassId() {
+            return classId;
+        }
+
+        public void setClassId(Integer classId) {
+            this.classId = classId;
+        }
+
+        public String getTestType() {
+            return testType;
+        }
+
+        public void setTestType(String testType) {
+            this.testType = testType;
         }
     }
 } 

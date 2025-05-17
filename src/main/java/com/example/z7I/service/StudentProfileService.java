@@ -1,6 +1,8 @@
 package com.example.z7I.service;
 
 import java.sql.Date;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.List;
 
 import org.springframework.stereotype.Service;
@@ -70,6 +72,7 @@ public class StudentProfileService {
         profile.setDistrict(request.getDistrict());
         profile.setCity(request.getCity());
         profile.setPinCode(request.getPinCode());
+        profile.setCreatedAt(LocalDateTime.now());
         // Ignore retypeEmail for storage
         StudentProfile saved = studentProfileRepository.save(profile);
         response.setSuccess(true);
@@ -96,6 +99,13 @@ public class StudentProfileService {
         data.setDistrict(profile.getDistrict());
         data.setCity(profile.getCity());
         data.setPinCode(profile.getPinCode());
+if (profile.getCreatedAt() != null) {
+    DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
+    data.setCreatedAt(profile.getCreatedAt().format(formatter));
+} else {
+    data.setCreatedAt(null);
+}
+
         return data;
     }
 }

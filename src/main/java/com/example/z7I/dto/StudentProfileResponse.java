@@ -29,6 +29,7 @@ public class StudentProfileResponse {
         private String district;
         private String city;
         private String pinCode;
+        private String createdAt;
         // Getters and setters
         public Long getId() { return id; }
         public void setId(Long id) { this.id = id; }
@@ -62,5 +63,7 @@ public class StudentProfileResponse {
         public void setCity(String city) { this.city = city; }
         public String getPinCode() { return pinCode; }
         public void setPinCode(String pinCode) { this.pinCode = pinCode; }
+        public String getCreatedAt() { return createdAt; }
+public void setCreatedAt(String createdAt) { this.createdAt = createdAt; }
     }
 } 

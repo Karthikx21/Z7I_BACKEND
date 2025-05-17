@@ -32,7 +32,7 @@ public class TestDetails {
 
     private String studyWish;
 
-
+    private String testType;  // discriminator column to differentiate test details types
 
     // Getters and Setters
 
@@ -106,5 +106,13 @@ public class TestDetails {
 
     public void setStudyWish(String studyWish) {
         this.studyWish = studyWish;
+    }
+
+    public String getTestType() {
+        return testType;
+    }
+
+    public void setTestType(String testType) {
+        this.testType = testType;
     }
 }

@@ -26,4 +26,11 @@ public class  TestDetailsController {
         TestDetailsResponse response = testDetailsService.getTestDetailsByClass(classId);
         return ResponseEntity.ok(response);
     }
+
+    @GetMapping("/RenaissanceDetails")
+    public ResponseEntity<TestDetailsResponse> getRenaissanceTestDetailsByClass(@RequestParam int classId) {
+        TestDetailsResponse response = testDetailsService.getRenaissanceTestDetailsByClass(classId);
+        return ResponseEntity.ok(response);
+    }
+
 }

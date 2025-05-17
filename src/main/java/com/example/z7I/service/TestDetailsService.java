@@ -20,7 +20,21 @@ public class TestDetailsService {
 
     public TestDetailsResponse getTestDetailsByClass(Integer classId) {
         TestDetailsResponse response = new TestDetailsResponse();
-        List<TestDetails> testDetailsList = testDetailsRepository.findByClassId(classId);
+        List<TestDetails> testDetailsList = testDetailsRepository.findByClassIdAndTestType(classId, "general");
+        if (testDetailsList.isEmpty()) {
+            response.setSuccess(false);
+            response.setMessage("No test details found for this class");
+            return response;
+        }
+        response.setSuccess(true);
+        response.setMessage("Test details found");
+        response.setData(testDetailsList.stream().map(this::mapToData).collect(Collectors.toList()));
+        return response;
+    }
+
+    public TestDetailsResponse getRenaissanceTestDetailsByClass(Integer classId) {
+        TestDetailsResponse response = new TestDetailsResponse();
+        List<TestDetails> testDetailsList = testDetailsRepository.findByClassIdAndTestType(classId, "renaissance");
         if (testDetailsList.isEmpty()) {
             response.setSuccess(false);
             response.setMessage("No test details found for this class");
@@ -35,12 +49,14 @@ public class TestDetailsService {
     private TestDetailsResponse.TestDetailsData mapToData(TestDetails testDetails) {
         TestDetailsResponse.TestDetailsData data = new TestDetailsResponse.TestDetailsData();
         data.setId(testDetails.getId());
+        data.setClassId(testDetails.getClassId());
         data.setTestDate(testDetails.getTestDate() != null ? testDetails.getTestDate().toString() : null);
         data.setTestMode(testDetails.getTestMode());
         data.setTestCity(testDetails.getTestCity());
         data.setTestCentre(testDetails.getTestCentre());
         data.setStudyCentre(testDetails.getStudyCentre());
         data.setProgramName(testDetails.getProgramName());
+        data.setTestType(testDetails.getTestType());
         data.setStudyWish(testDetails.getStudyWish());
         return data;
     }

@@ -1,5 +1,7 @@
 package com.example.z7I.model;
 
+import java.time.LocalDateTime;
+
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -44,6 +46,9 @@ public class StudentProfile {
     private String city;
 
     private String pinCode;
+
+        @Column(name = "created_at")
+    private LocalDateTime createdAt = LocalDateTime.now();
 
     @Column(unique = true)
     private String mobileNo;
@@ -184,5 +189,13 @@ public class StudentProfile {
 
     public void setMobileNo(String mobileNo) {
         this.mobileNo = mobileNo;
+    }
+
+    public LocalDateTime getCreatedAt() {
+        return createdAt;
+    }
+
+    public void setCreatedAt(LocalDateTime createdAt) {
+        this.createdAt = createdAt;
     }
 }

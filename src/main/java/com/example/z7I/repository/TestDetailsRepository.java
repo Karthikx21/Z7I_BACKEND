@@ -8,4 +8,8 @@ import com.example.z7I.model.TestDetails;
 
 public interface TestDetailsRepository extends JpaRepository<TestDetails, Long> {
     List<TestDetails> findByClassId(Integer classId);
+
+    List<TestDetails> findByClassIdAndTestType(Integer classId, String testType);
+
+    List<TestDetails> findByTestType(String testType);
 }
