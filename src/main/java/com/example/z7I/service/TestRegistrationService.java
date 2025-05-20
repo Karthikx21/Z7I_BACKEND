@@ -1,10 +1,13 @@
 package com.example.z7I.service;
 
 import java.io.ByteArrayOutputStream;
-import java.time.format.DateTimeFormatter;
+import java.util.Map;
 import java.util.Optional;
 
 import org.springframework.stereotype.Service;
+import org.thymeleaf.TemplateEngine;
+// import jakarta.validation.MessageInterpolator.Context;
+import org.thymeleaf.context.Context;
 
 import com.example.z7I.dto.RegistrationRequest;
 import com.example.z7I.dto.RegistrationResponse;
@@ -14,24 +17,25 @@ import com.example.z7I.model.TestRegistration;
 import com.example.z7I.repository.StudentProfileRepository;
 import com.example.z7I.repository.TestDetailsRepository;
 import com.example.z7I.repository.TestRegistrationRepository;
-import com.itextpdf.text.Document;
-import com.itextpdf.text.DocumentException;
-import com.itextpdf.text.Paragraph;
-import com.itextpdf.text.pdf.PdfWriter;
+import com.openhtmltopdf.pdfboxout.PdfRendererBuilder;
 
 @Service
 public class TestRegistrationService {
 
+
     private final TestRegistrationRepository testRegistrationRepository;
     private final TestDetailsRepository testDetailsRepository;
     private final StudentProfileRepository studentProfileRepository;
+    private final TemplateEngine templateEngine;
 
     public TestRegistrationService(TestRegistrationRepository testRegistrationRepository,
                                    TestDetailsRepository testDetailsRepository,
-                                   StudentProfileRepository studentProfileRepository) {
+                                   StudentProfileRepository studentProfileRepository,
+                                   TemplateEngine templateEngine) {
         this.testRegistrationRepository = testRegistrationRepository;
         this.testDetailsRepository = testDetailsRepository;
         this.studentProfileRepository = studentProfileRepository;
+        this.templateEngine = templateEngine;
     }
 
     public RegistrationResponse registerStudent(RegistrationRequest request) {
@@ -63,38 +67,43 @@ public class TestRegistrationService {
         return response;
     }
 
-    public byte[] generateHallTicketPdf(String registrationId) {
+public byte[] generateHallTicketPdf(String registrationId) {
     TestRegistration reg = testRegistrationRepository.findByRegistrationId(registrationId);
-    if (reg == null) {
-        return null;
-    }
+    if (reg == null) return null;
+
     StudentProfile student = reg.getStudent();
     TestDetails test = reg.getTest();
 
-    Document document = new Document();
-    try (ByteArrayOutputStream baos = new ByteArrayOutputStream()) {
-        PdfWriter.getInstance(document, baos);
-        document.open();
+    Map<String, Object> data = Map.of(
+        "registrationId", reg.getRegistrationId(),
+        "name", student.getFirstName() + " " + student.getMiddleName() + " " + student.getLastName(),
+        "address", student.getAddressLine1() + ", " + student.getAddressLine2() + ", " +
+                   student.getCity() + ", " + student.getState() + ", " +
+                   student.getCountry() + ", " + student.getPinCode(),
+        "email", student.getEmail(),
+        "programName", test.getProgramName(),
+        "testCentre", test.getTestCentre(),
+        "testDate", test.getTestDate().toString(),
+        "examSchedule", "10:00 AM - 1:00 PM",
+        "reportingTime", "9:00 AM",
+        "registrationDate", reg.getCreatedAt().toString()
+    );
 
-        document.add(new Paragraph("Hall Ticket"));
-        document.add(new Paragraph("Registration Number: " + reg.getRegistrationId()));
-        document.add(new Paragraph("Name: " + student.getFirstName() + " " + student.getMiddleName() + " " + student.getLastName()));
-        document.add(new Paragraph("Address: " + student.getAddressLine1() + ", " + student.getAddressLine2() + ", " + student.getCity() + ", " + student.getState() + ", " + student.getCountry() + ", " + student.getPinCode()));
-        document.add(new Paragraph("Email ID: " + student.getEmail()));
-        document.add(new Paragraph("Program: " + test.getProgramName()));
-        document.add(new Paragraph("Test Centre: " + test.getTestCentre()));
-        document.add(new Paragraph("Test Date: " + test.getTestDate().format(DateTimeFormatter.ISO_DATE)));
-        // Assuming exam schedule and reporting time are fixed or can be added here as needed
-        document.add(new Paragraph("Exam Schedule: 10:00 AM - 1:00 PM"));
-        document.add(new Paragraph("Reporting Time: 9:00 AM"));
-        document.add(new Paragraph("Registration Date: " + reg.getCreatedAt().format(DateTimeFormatter.ISO_DATE_TIME)));
+    try (ByteArrayOutputStream out = new ByteArrayOutputStream()) {
+        Context context = new Context();
+        context.setVariables(data);
 
-        document.close();
-        return baos.toByteArray();
-    } catch (DocumentException | java.io.IOException e) {
+        String html = templateEngine.process("hallticket", context);
+
+        PdfRendererBuilder builder = new PdfRendererBuilder();
+        builder.withHtmlContent(html, null);
+        builder.toStream(out);
+        builder.run();
+
+        return out.toByteArray();
+    } catch (Exception e) {
         e.printStackTrace();
         return null;
     }
-
 }
 }

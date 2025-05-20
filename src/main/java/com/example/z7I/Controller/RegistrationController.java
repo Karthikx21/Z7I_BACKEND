@@ -37,15 +37,17 @@ public class RegistrationController {
         return ResponseEntity.status(201).body(response);
     }
 
-    @GetMapping("/hallticket")
-    public ResponseEntity<byte[]> downloadHallTicket(@RequestParam String registrationId) throws IOException {
-        byte[] pdfBytes = testRegistrationService.generateHallTicketPdf(registrationId);
-        if (pdfBytes == null) {
-            return ResponseEntity.notFound().build();
-        }
-        return ResponseEntity.ok()
-                .header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=hallticket_" + registrationId + ".pdf")
-                .contentType(MediaType.APPLICATION_PDF)
-                .body(pdfBytes);
+@GetMapping("/hallticket")
+public ResponseEntity<byte[]> downloadHallTicket(@RequestParam String registrationId) throws IOException {
+    byte[] pdfBytes = testRegistrationService.generateHallTicketPdf(registrationId);
+    if (pdfBytes == null) {
+        return ResponseEntity.notFound().build();
     }
+
+    return ResponseEntity.ok()
+            .header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=hallticket_" + registrationId + ".pdf")
+            .contentType(MediaType.APPLICATION_PDF)
+            .body(pdfBytes);
+}
+
 }
