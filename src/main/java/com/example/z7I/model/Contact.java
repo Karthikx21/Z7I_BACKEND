@@ -1,6 +1,11 @@
 package com.example.z7I.model;
 
-import jakarta.persistence.*;
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+import jakarta.persistence.Table;
 import java.time.LocalDateTime;
 
 @Entity
@@ -9,22 +14,17 @@ public class Contact {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(columnDefinition = "BIGSERIAL")
     private Long id;
 
-    @Column(name = "name", nullable = false, length = 50)
     private String name;
 
-    @Column(name = "email", nullable = false, length = 100)
     private String email;
 
-    @Column(name = "mobile_number", length = 20)
     private String mobileNumber;
 
-    @Column(name = "register_number", length = 30)
     private String registerNumber;
 
-    @Column(name = "created_at", nullable = false, updatable = false, columnDefinition = "TIMESTAMP DEFAULT CURRENT_TIMESTAMP")
+    @Column(name = "created_at")
     private LocalDateTime createdAt = LocalDateTime.now();
 
     // Getters and Setters
