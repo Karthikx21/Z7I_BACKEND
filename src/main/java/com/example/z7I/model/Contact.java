@@ -76,16 +76,4 @@ public class Contact {
         this.createdAt = createdAt;
     }
 
-    // toString() method for better logging
-    @Override
-    public String toString() {
-        return "Contact{" +
-                "id=" + id +
-                ", name='" + name + '\'' +
-                ", email='" + email + '\'' +
-                ", mobileNumber='" + mobileNumber + '\'' +
-                ", registerNumber='" + registerNumber + '\'' +
-                ", createdAt=" + createdAt +
-                '}';
-    }
 }
